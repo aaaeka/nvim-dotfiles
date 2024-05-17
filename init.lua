@@ -136,7 +136,6 @@ vim.keymap.set('n', '<leader>ot', toggleTerminal, { desc = '[O]pen [T]erminal' }
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-vim.keymap.set('t', '<Esc>t', '<cmd>bp<cr>', { desc = 'Exit terminal mode and go back to previous buffer' })
 
 -- Toggle the terminal
 
@@ -509,7 +508,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -518,6 +517,7 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
         tsserver = {},
+        eslint = {},
         --
 
         lua_ls = {
@@ -761,6 +761,7 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
+  {},
   {
     'NeogitOrg/neogit',
     dependencies = {
@@ -769,6 +770,11 @@ require('lazy').setup({
       'nvim-telescope/telescope.nvim',
     },
     config = true,
+  },
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -811,6 +817,65 @@ require('lazy').setup({
     },
   },
 })
+
+-- HARPOON STUFF
+local harpoon = require 'harpoon'
+
+-- REQUIRED
+harpoon:setup()
+-- REQUIRED
+
+vim.keymap.set('n', 'ha', function()
+  harpoon:list():add()
+end, { desc = 'Mark file' })
+vim.keymap.set('n', 'hc', function()
+  harpoon:list():clear()
+end, { desc = 'Clear harpoon list' })
+vim.keymap.set('n', 'hx', function()
+  harpoon:list():remove()
+end, { desc = 'Clear harpoon list' })
+vim.keymap.set('n', 'h1', function()
+  harpoon:list():select(1)
+end, { desc = 'Go to first [1] marked file' })
+vim.keymap.set('n', 'h2', function()
+  harpoon:list():select(2)
+end, { desc = 'Go to first [2] marked file' })
+vim.keymap.set('n', 'h3', function()
+  harpoon:list():select(3)
+end, { desc = 'Go to first [3] marked file' })
+vim.keymap.set('n', 'h4', function()
+  harpoon:list():select(4)
+end, { desc = 'Go to first [4] marked file' })
+vim.keymap.set('n', 'hp', function()
+  harpoon:list():prev()
+end, { desc = 'Go to previous marked filed' })
+vim.keymap.set('n', 'hn', function()
+  harpoon:list():next()
+end, { desc = 'Go to next marked file' })
+
+-- harpoon basic telescope configuration
+local conf = require('telescope.config').values
+local function toggle_telescope(harpoon_files)
+  local file_paths = {}
+  for _, item in ipairs(harpoon_files.items) do
+    table.insert(file_paths, item.value)
+  end
+
+  require('telescope.pickers')
+    .new({}, {
+      prompt_title = 'Harpoon',
+      finder = require('telescope.finders').new_table {
+        results = file_paths,
+      },
+      previewer = conf.file_previewer {},
+      sorter = conf.generic_sorter {},
+    })
+    :find()
+end
+
+vim.keymap.set('n', '<leader>sm', function()
+  toggle_telescope(harpoon:list())
+end, { desc = 'Open marked file list' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
