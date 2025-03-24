@@ -467,6 +467,7 @@ require('lazy').setup({
         pyright = {},
         ts_ls = {},
         eslint = {},
+        prettier = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
