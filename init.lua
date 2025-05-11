@@ -657,6 +657,8 @@ require('lazy').setup({
     init = function()
       -- Load the colorscheme here.
       vim.cmd [[colorscheme github_light]]
+      -- Dark colorscheme for quick changing
+      -- vim.cmd [[colorscheme github_dark_default]]
     end,
   },
 
