@@ -655,10 +655,17 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     init = function()
-      -- Load the colorscheme here.
       vim.cmd [[colorscheme github_light]]
-      -- Dark colorscheme for quick changing
-      -- vim.cmd [[colorscheme github_dark_default]]
+      local is_dark = false
+      vim.keymap.set('n', '<leader>oc', function()
+        if is_dark then
+          vim.cmd [[colorscheme github_light]]
+          is_dark = false
+        else
+          vim.cmd [[colorscheme github_dark_default]]
+          is_dark = true
+        end
+      end, { desc = 'Change [C]olorscheme' })
     end,
   },
 
