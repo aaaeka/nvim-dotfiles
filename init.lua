@@ -15,7 +15,7 @@ vim.g.have_nerd_font = true
 -- Make line numbers default
 vim.opt.number = true
 -- Turn on relative numbering
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -99,48 +99,8 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', '<leader>op', '<cmd>Neotree action=show toggle=true<cr>', { desc = '[O]pen [P]roject explorer' })
 vim.keymap.set('n', '<leader>og', '<cmd>Neogit<cr>', { desc = '[O]pen [G]it status' })
 
--- Find if there is a terminal buffer
-local function findTermBuffer()
-  local buf_list = vim.api.nvim_list_bufs() -- Get a list of all buffers
-  for _, buf in ipairs(buf_list) do
-    local buf_name = vim.api.nvim_buf_get_name(buf) -- Get the name of the buffer
-    if buf_name:sub(1, 7) == 'term://' then -- Check if the buffer name starts with "term://"
-      return buf -- Return the buffer ID if found
-    end
-  end
-  return nil -- Return nil if no such buffer found
-end
-
-local function isCurrentBufferTerminal()
-  local current_buf = vim.api.nvim_get_current_buf() -- Get the current buffer ID
-  local buf_name = vim.api.nvim_buf_get_name(current_buf) -- Get the name of the current buffer
-  return buf_name:sub(1, 7) == 'term://' -- Return true if the buffer name starts with "term://", otherwise false
-end
-
-local function toggleTerminal()
-  if isCurrentBufferTerminal() then
-    vim.cmd.bp()
-  else
-    local term = findTermBuffer()
-    if term then
-      vim.api.nvim_set_current_buf(term)
-    else
-      vim.cmd.terminal()
-    end
-  end
-end
-
-vim.keymap.set('n', '<leader>ot', toggleTerminal, { desc = '[O]pen [T]erminal' })
-
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
--- Toggle the terminal
-
--- [[ Basic Autocommands ]]
---  See `:help lua-guide-autocommands`
+-- Setup terminal keybinds
+require 'terminal'
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
@@ -655,8 +615,13 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     init = function()
-      vim.cmd [[colorscheme github_light]]
-      local is_dark = false
+      local is_dark = true
+      if is_dark then
+        vim.cmd [[colorscheme github_dark_default]]
+      else
+        vim.cmd [[colorscheme github_light]]
+      end
+
       vim.keymap.set('n', '<leader>oc', function()
         if is_dark then
           vim.cmd [[colorscheme github_light]]
@@ -672,25 +637,6 @@ require('lazy').setup({
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
-  { -- Collection of various small independent plugins/modules
-    'echasnovski/mini.nvim',
-    config = function()
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-    end,
-  },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -732,15 +678,29 @@ require('lazy').setup({
     config = true,
   },
   {
-    'ThePrimeagen/harpoon',
-    branch = 'harpoon2',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-  },
-  {
     'gregorias/coerce.nvim',
     tag = 'v4.1.0',
     config = true,
   },
+  -- { -- Collection of various small independent plugins/modules
+  --   'echasnovski/mini.nvim',
+  --   config = function()
+  --     -- Simple and easy statusline.
+  --     --  You could remove this setup call if you don't like it,
+  --     --  and try some other statusline plugin
+  --     local statusline = require 'mini.statusline'
+  --     -- set use_icons to true if you have a Nerd Font
+  --     statusline.setup { use_icons = vim.g.have_nerd_font }
+  --
+  --     -- You can configure sections in the statusline by overriding their
+  --     -- default behavior. For example, here we set the section for
+  --     -- cursor location to LINE:COLUMN
+  --     ---@diagnostic disable-next-line: duplicate-set-field
+  --     statusline.section_location = function()
+  --       return '%2l:%-2v'
+  --     end
+  --   end,
+  -- },
 
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
@@ -786,68 +746,6 @@ wk.add {
   { '<leader>w', group = '[W]orkspace' },
   { '<leader>w_', hidden = true },
 }
-
--- HARPOON STUFF
-local harpoon = require 'harpoon'
-
--- REQUIRED
-harpoon:setup()
--- REQUIRED
-
-vim.keymap.set('n', '<leader>ha', function()
-  harpoon:list():add()
-end, { desc = 'Mark file' })
-vim.keymap.set('n', '<leader>hc', function()
-  harpoon:list():clear()
-end, { desc = 'Clear harpoon list' })
-vim.keymap.set('n', '<leader>hx', function()
-  harpoon:list():remove()
-end, { desc = 'Remove current file from harpoon' })
-vim.keymap.set('n', '<leader>h1', function()
-  harpoon:list():select(1)
-end, { desc = 'Go to first [1] marked file' })
-vim.keymap.set('n', '<leader>h2', function()
-  harpoon:list():select(2)
-end, { desc = 'Go to first [2] marked file' })
-vim.keymap.set('n', '<leader>h3', function()
-  harpoon:list():select(3)
-end, { desc = 'Go to first [3] marked file' })
-vim.keymap.set('n', '<leader>h4', function()
-  harpoon:list():select(4)
-end, { desc = 'Go to first [4] marked file' })
-vim.keymap.set('n', '<leader>hp', function()
-  harpoon:list():prev()
-end, { desc = 'Go to previous marked filed' })
-vim.keymap.set('n', '<leader>hn', function()
-  harpoon:list():next()
-end, { desc = 'Go to next marked file' })
-
--- harpoon basic telescope configuration
-local conf = require('telescope.config').values
-local function toggle_telescope(harpoon_files)
-  local file_paths = {}
-  for _, item in ipairs(harpoon_files.items) do
-    table.insert(file_paths, item.value)
-  end
-
-  require('telescope.pickers')
-    .new({}, {
-      prompt_title = 'Harpoon',
-      finder = require('telescope.finders').new_table {
-        results = file_paths,
-      },
-      previewer = false,
-      layout_config = {
-        width = 0.4,
-        height = 0.3,
-      },
-    })
-    :find()
-end
-
-vim.keymap.set('n', '<leader>sm', function()
-  toggle_telescope(harpoon:list())
-end, { desc = 'Open marked file list' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
