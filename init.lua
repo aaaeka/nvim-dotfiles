@@ -102,6 +102,11 @@ vim.keymap.set('n', '<leader>og', '<cmd>Neogit<cr>', { desc = '[O]pen [G]it stat
 -- Setup terminal keybinds
 require 'terminal'
 
+-- Windows specific fixes (also theres a fix for supermaven)
+if vim.fn.has 'win32' == 1 then
+  vim.o.shell = 'sh.exe'
+end
+
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
@@ -425,7 +430,7 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         pyright = {},
-        ts_ls = {},
+        -- ts_ls = {},
         eslint = {},
         prettier = {},
         -- rust_analyzer = {},
@@ -489,7 +494,7 @@ require('lazy').setup({
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
         return {
-          timeout_ms = 500,
+          timeout_ms = 2500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
         }
       end,
@@ -500,7 +505,10 @@ require('lazy').setup({
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        javascriptreact = { 'prettier' },
       },
     },
   },
