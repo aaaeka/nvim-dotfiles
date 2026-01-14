@@ -623,7 +623,7 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     init = function()
-      local is_dark = false
+      local is_dark = true
       if is_dark then
         vim.cmd [[colorscheme github_dark_default]]
       else
