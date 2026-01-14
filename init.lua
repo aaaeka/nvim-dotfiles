@@ -102,7 +102,7 @@ vim.keymap.set('n', '<leader>og', '<cmd>Neogit<cr>', { desc = '[O]pen [G]it stat
 -- Setup terminal keybinds
 require 'terminal'
 
--- Windows specific fixes (also theres a fix for supermaven)
+-- Windows specific fixes
 if vim.fn.has 'win32' == 1 then
   vim.o.shell = 'sh.exe'
 end
