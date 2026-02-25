@@ -102,6 +102,9 @@ vim.keymap.set('n', '<leader>og', '<cmd>Neogit<cr>', { desc = '[O]pen [G]it stat
 -- Setup terminal keybinds
 require 'terminal'
 
+-- Setup terminal name
+require 'titlestring'
+
 -- Windows specific fixes
 if vim.fn.has 'win32' == 1 then
   vim.o.shell = 'sh.exe'
@@ -115,15 +118,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
-  end,
-})
-
--- Update the terminal title on new file
-vim.api.nvim_create_autocmd('BufEnter', {
-  desc = 'Change terminal title on file open',
-  group = vim.api.nvim_create_augroup('kickstart-update-title', { clear = true }),
-  callback = function()
-    vim.cmd.set 'title'
   end,
 })
 
