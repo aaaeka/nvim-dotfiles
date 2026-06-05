@@ -422,6 +422,7 @@ require('lazy').setup({
         -- ts_ls = {},
         eslint = {},
         prettier = {},
+        texlab = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -499,6 +500,8 @@ require('lazy').setup({
         typescriptreact = { 'prettier' },
         javascriptreact = { 'prettier' },
         go = { 'gofmt' },
+        python = { 'black' },
+        tex = { 'tex-fmt' },
       },
     },
   },
@@ -541,8 +544,9 @@ require('lazy').setup({
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = { 'ruby', 'latex' },
       },
+      ignore_install = { 'latex' },
       indent = { enable = true, disable = { 'ruby' } },
     },
     config = function(_, opts)

@@ -1,0 +1,19 @@
+theme = Github Dark Default
+
+# Stupid blur (maybe turn off lol)
+background-blur = true
+background-opacity-cells = true
+background-opacity = 0.8
+
+# window-decoration = none
+quit-after-last-window-closed = true
+macos-titlebar-style = tabs
+
+#  `blueprint`, `chalkboard`, `microchip`, `glass`, `holographic`,
+#  `paper`, `retro`, `xray` - Official variants of the Ghostty icon
+macos-icon = blueprint
+
+# Makes tabs appear at the end of the list
+window-new-tab-position = end
+
+# 2994
