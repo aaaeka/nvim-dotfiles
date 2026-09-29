@@ -101,6 +101,9 @@ require 'terminal'
 -- Setup terminal name
 require 'titlestring'
 
+-- Copy the current file path
+require 'filepath-copy'
+
 -- Windows specific fixes
 if vim.fn.has 'win32' == 1 then
   vim.o.shell = 'sh.exe'

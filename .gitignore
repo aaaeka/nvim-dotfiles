@@ -4,5 +4,6 @@ test.sh
 nvim
 
 spell/
+nvim.log
 
 .DS_Store
