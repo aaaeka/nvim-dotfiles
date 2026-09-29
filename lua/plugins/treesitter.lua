@@ -2,7 +2,7 @@ vim.pack.add { { src = 'https://github.com/nvim-treesitter/nvim-treesitter', ver
 
 local treesitter = require 'nvim-treesitter'
 treesitter.setup {}
-treesitter.install { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' }
+treesitter.install { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc', 'javascript', 'typescript', 'tsx', 'c_sharp' }
 
 vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('plugins-treesitter', { clear = true }),
