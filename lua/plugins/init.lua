@@ -58,6 +58,8 @@ for _, plugin in ipairs {
   'lualine',
   'typescript-tools',
   'vimtex',
+  'dap',
+  'dap-view',
 } do
   require('plugins.' .. plugin)
 end

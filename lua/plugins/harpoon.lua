@@ -57,4 +57,4 @@ end
 
 vim.keymap.set('n', '<leader>sm', function()
   toggle_telescope(harpoon:list())
-end, { desc = 'Open marked file list' })
+end, { desc = '[S]earch [M]arked file list' })

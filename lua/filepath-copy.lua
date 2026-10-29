@@ -9,4 +9,4 @@ local function copyFilePathToClipboard()
   vim.api.nvim_echo({ { string.format('Path `%s` copied to clipboard', path) } }, false, {})
 end
 
-vim.keymap.set('n', '<leader>dc', copyFilePathToClipboard, { desc = '[C]opy file path' })
+vim.keymap.set('n', '<leader>df', copyFilePathToClipboard, { desc = 'Copy [F]ile path' })

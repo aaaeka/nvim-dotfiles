@@ -7,7 +7,7 @@ wk.add {
   { '<leader>a_', hidden = true },
   { '<leader>c', group = '[C]ode' },
   { '<leader>c_', hidden = true },
-  { '<leader>d', group = '[D]ocument' },
+  { '<leader>d', group = '[D]ebug / [D]ocument' },
   { '<leader>d_', hidden = true },
   { '<leader>h', group = '[H]arpoon' },
   { '<leader>h_', hidden = true },

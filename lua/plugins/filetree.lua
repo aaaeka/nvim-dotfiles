@@ -13,3 +13,5 @@ require('neo-tree').setup {
 }
 
 vim.keymap.set('n', '<leader>op', '<cmd>Neotree action=show toggle=true<cr>', { desc = '[O]pen [P]roject explorer' })
+vim.keymap.set('n', '<leader>or', '<cmd>Neotree reveal<cr>', { desc = '[O]pen project explorer with [R]eveal' })
+vim.keymap.set('n', '<leader>e', '<cmd>Neotree focus<cr>', { desc = 'Focus file [E]xplorer' })

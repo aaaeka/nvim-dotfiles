@@ -16,7 +16,9 @@ vim.api.nvim_create_autocmd('FileType', {
     if ft == 'ruby' or ft == 'tex' then
       vim.bo[event.buf].syntax = ft
     end
-    if ft ~= 'ruby' then
+    -- Keep the built-in indenter when the parser has no indentation query.
+    local lang = vim.treesitter.language.get_lang(ft)
+    if ft ~= 'ruby' and lang and vim.treesitter.query.get(lang, 'indents') then
       vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
     end
   end,
